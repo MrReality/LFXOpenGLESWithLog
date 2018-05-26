@@ -381,8 +381,8 @@ string toLFXOpenGLESLiteral(GLESMacro type, GLint value) {
                 case GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT:
                     valueLiteral = LFX_C_STRING(GL_FRAMEBUFFER_INCOMPLETE_MISSING_ATTACHMENT);
                     break;
-//                case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
-//                    valueLiteral = LFX_C_STRING(GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS);
+                    //                case GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS:
+                    //                    valueLiteral = LFX_C_STRING(GL_FRAMEBUFFER_INCOMPLETE_DIMENSIONS);
                     break;
                 case GL_FRAMEBUFFER_UNSUPPORTED:
                     valueLiteral = LFX_C_STRING(GL_FRAMEBUFFER_UNSUPPORTED);
@@ -598,20 +598,20 @@ string toLFXOpenGLESLiteral(GLESMacro type, GLint value) {
                 case GL_FLOAT:
                     valueLiteral = LFX_C_STRING(GL_FLOAT);
                     break;
-//                case GL_DOUBLE:
-//                    valueLiteral = LFX_C_STRING(GL_DOUBLE);
-//                    break;
-//                case GL_FIXED:
-//                    valueLiteral = LFX_C_STRING(GL_FIXED);
+                    //                case GL_DOUBLE:
+                    //                    valueLiteral = LFX_C_STRING(GL_DOUBLE);
+                    //                    break;
+                    //                case GL_FIXED:
+                    //                    valueLiteral = LFX_C_STRING(GL_FIXED);
                     break;
-//                case GL_INT_2_10_10_10_REV:
-//                    valueLiteral = LFX_C_STRING(GL_INT_2_10_10_10_REV);
+                    //                case GL_INT_2_10_10_10_REV:
+                    //                    valueLiteral = LFX_C_STRING(GL_INT_2_10_10_10_REV);
                     break;
-//                case GL_UNSIGNED_INT_2_10_10_10_REV:
-//                    valueLiteral = LFX_C_STRING(GL_UNSIGNED_INT_2_10_10_10_REV);
+                    //                case GL_UNSIGNED_INT_2_10_10_10_REV:
+                    //                    valueLiteral = LFX_C_STRING(GL_UNSIGNED_INT_2_10_10_10_REV);
                     break;
-//                case GL_UNSIGNED_INT_10F_11F_11F_REV:
-//                    valueLiteral = LFX_C_STRING(GL_UNSIGNED_INT_10F_11F_11F_REV);
+                    //                case GL_UNSIGNED_INT_10F_11F_11F_REV:
+                    //                    valueLiteral = LFX_C_STRING(GL_UNSIGNED_INT_10F_11F_11F_REV);
                     break;
                 default:
                     break;
@@ -648,7 +648,7 @@ string toLFXOpenGLESLiteral(GLESMacro type, GLint value) {
         case StringName:
             break;
     }
-
+    
     return valueLiteral;
 }
 
@@ -748,7 +748,7 @@ LFXOpenGLES::GenTextures(ConstStringRefLabel, GLsizei n, GLuint *textures) const
 
 const LFXOpenGLES &LFXOpenGLES::BindTexture(const string &label, GLenum target, GLuint texture) const {
     glBindTexture(target, texture);
-
+    
     if (enableVerboseOutput) {
         LogDebug("glBindTexture(target = %s, texture = %d)", toLFXOpenGLESLiteral(TextureTarget, target).c_str(), texture);
 #if GL_EXT_debug_label
@@ -764,14 +764,21 @@ const LFXOpenGLES &LFXOpenGLES::TexParameterf(const string &label, GLenum target
     glTexParameterf(target, pname, param);
     if (enableVerboseOutput) {
         LogDebug("glTexParameterf(target = %s, pname = %s, param = %s)",
-                toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
-                toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
-                toLFXOpenGLESLiteral(TextureTarget, param).c_str());
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
+                 toLFXOpenGLESLiteral(TextureTarget, param).c_str());
     }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::TexParameterfv(const string &label, GLenum target, GLenum pname, const GLfloat *params) const {
+    //    glTexParameterfv(target, pname, params);
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glTexParameterfv(target = %s, pname = %s, param = %s)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
+                 toLFXOpenGLESLiteral(TextureTarget, *params).c_str());
+    }
     return *this;
 }
 
@@ -779,9 +786,9 @@ const LFXOpenGLES &LFXOpenGLES::TexParameteri(const string &label, GLenum target
     glTexParameteri(target, pname, param);
     if (enableVerboseOutput) {
         LogDebug("glTexParameteri(target = %s, pname = %s, param = %s)",
-                toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
-                toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
-                toLFXOpenGLESLiteral(TextureTarget, param).c_str());
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
+                 toLFXOpenGLESLiteral(TextureTarget, param).c_str());
     }
     return *this;
 }
@@ -790,18 +797,30 @@ const LFXOpenGLES &LFXOpenGLES::TexParameteriv(const string &label, GLenum targe
     //glTexParameteriv(target, pname, params);
     if (enableVerboseOutput) {
         LogDebug("glTexParameteriv(target = %d, pname = %d, param = %d)",
-                target,
-                pname,
-                params);
+                 target,
+                 pname,
+                 params);
     }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::GetTexParameterfv(const string &label, GLenum target, GLenum pname, GLfloat *params) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glGetTexParameterfv(target = %s, pname = %s, param = %s)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
+                 toLFXOpenGLESLiteral(TextureTarget, *params).c_str());
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::GetTexParameteriv(const string &label, GLenum target, GLenum pname, GLint *params) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glGetTexParameteriv(target = %s, pname = %s, param = %s)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
+                 toLFXOpenGLESLiteral(TextureTarget, *params).c_str());
+    }
     return *this;
 }
 
@@ -809,15 +828,15 @@ const LFXOpenGLES &LFXOpenGLES::TexImage2D(const string &label, GLenum target, G
     glTexImage2D(target, level, internalformat, width, height, border, format, type, pixels);
     if (enableVerboseOutput) {
         LogDebug("glTexImage2D(target = %s, level = %d, internal format = %s, width = %d, height = %d, border = %d, format = %s, type = %s, pixels = %p)",
-                toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
-                level,
-                toLFXOpenGLESLiteral(GLESMacroTexture, internalformat).c_str(),
-                width,
-                height,
-                border,
-                toLFXOpenGLESLiteral(GLESMacroTexture, format).c_str(),
-                toLFXOpenGLESLiteral(GLESMacroDataType, type).c_str(),
-                pixels);
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 level,
+                 toLFXOpenGLESLiteral(GLESMacroTexture, internalformat).c_str(),
+                 width,
+                 height,
+                 border,
+                 toLFXOpenGLESLiteral(GLESMacroTexture, format).c_str(),
+                 toLFXOpenGLESLiteral(GLESMacroDataType, type).c_str(),
+                 pixels);
     }
     return *this;
 }
@@ -825,27 +844,50 @@ const LFXOpenGLES &LFXOpenGLES::TexImage2D(const string &label, GLenum target, G
 const LFXOpenGLES &LFXOpenGLES::TexSubImage2D(const string &label, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLenum type, const GLvoid *pixels) const {
     glTexSubImage2D(target, level, xoffset, yoffset, width, height, format, type, pixels);
     if (enableVerboseOutput) {
-
-
+        
+        
         LogDebug("glTexSubImage2D(target = %s, level = %d, xoffset = %d, yoffset = %d, width = %d, height = %d, format = %s, type = %s, pixels = %p)",
-                toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
-                level,
-                xoffset,
-                yoffset,
-                width,
-                height,
-                toLFXOpenGLESLiteral(GLESMacroTexture, format).c_str(),
-                toLFXOpenGLESLiteral(GLESMacroDataType, type).c_str(),
-                pixels);
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 level,
+                 xoffset,
+                 yoffset,
+                 width,
+                 height,
+                 toLFXOpenGLESLiteral(GLESMacroTexture, format).c_str(),
+                 toLFXOpenGLESLiteral(GLESMacroDataType, type).c_str(),
+                 pixels);
     }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::CompressedTexImage2D(const string &label, GLenum target, GLint level, GLenum internalformat, GLsizei width, GLsizei height, GLint border, GLsizei imageSize, const GLvoid *data) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glCompressedTexImage2D(target = %s, level = %d, internalformat = %d, width = %d, height = %d, border = %d imageSize = %d, data = %p)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 level,
+                 internalformat,
+                 width,
+                 height,
+                 border,
+                 imageSize,
+                 data);
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::CompressedTexSubImage2D(const string &label, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLsizei width, GLsizei height, GLenum format, GLsizei imageSize, const GLvoid *data) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glCompressedTexSubImage2D(target = %s, level = %d, xoffset = %d, yoffset = %d, width = %d, height = %d, format = %d imageSize = %d, data = %p)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 level,
+                 xoffset,
+                 yoffset,
+                 width,
+                 height,
+                 format,
+                 imageSize,
+                 data);
+    }
     return *this;
 }
 
@@ -875,19 +917,47 @@ const LFXOpenGLES &LFXOpenGLES::IsTexture(const string &label, GLuint texture, G
 }
 
 const LFXOpenGLES &LFXOpenGLES::DeleteTextures(const string &label, GLsizei n, const GLuint *textures) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glDeleteTextures(n = %d, textures = %p) -> %d", n, textures, *textures);
+    }
     glDeleteTextures(n, textures);
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::CopyTexImage2D(const string &label, GLenum target, GLint level, GLenum internalformat, GLint x, GLint y, GLsizei width, GLsizei height, GLint border) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glCopyTexImage2D(target = %s, level = %d, internalformat = %d, x = %d, y = %d, width = %d, height = %d, border = %d)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 level,
+                 internalformat,
+                 x,
+                 y,
+                 width,
+                 height,
+                 border);
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::CopyTexSubImage2D(const string &label, GLenum target, GLint level, GLint xoffset, GLint yoffset, GLint x, GLint y, GLsizei width, GLsizei height) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glCopyTexSubImage2D(target = %s, level = %d, xoffset = %d, yoffset = %d, x = %d, y = %d, width = %d, height = %d)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 level,
+                 xoffset,
+                 yoffset,
+                 x,
+                 y,
+                 width,
+                 height);
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::GenerateMipmap(const string &label, GLenum target) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glGenerateMipmap(target = %s)", toLFXOpenGLESLiteral(TextureTarget, target).c_str());
+    }
     return *this;
 }
 
@@ -895,26 +965,54 @@ const LFXOpenGLES &LFXOpenGLES::GenBuffers(const std::string &label, GLsizei n, 
     /**
      * GL_INVALID_VALUE is generated if n is negative.
      */
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glGenBuffers(n = %d, buffers = %p)",
+                 n,
+                 buffers);
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::BindBuffer(const string &label, GLenum target, GLuint buffer) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glBindBuffer(target = %s, buffer = %d)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 buffer);
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::BufferData(const string &label, GLenum target, GLsizeiptr size, const GLvoid *data, GLenum usage) {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glufferData(target = %s, size = %ld, data = %p, usage = %d)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 size,
+                 data,
+                 usage);
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::BufferSubData(const string &label, GLenum target, GLintptr offset, GLsizeiptr size, const GLvoid *data) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("gl:BufferSubData(target = %s, offset = %ld, size = %ld, data = %p)",
+                 toLFXOpenGLESLiteral(TextureTarget, target).c_str(),
+                 offset,
+                 size,
+                 data);
+    }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::DeleteBuffers(ConstStringRefLabel, GLsizei n, const GLuint *buffers) const {
+    
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::IsBuffer(const string &label, GLuint buffer) const {
+    if (enableVerboseOutput) {      /// mix
+        LogDebug("glIsBuffer(buffer = %d)", buffer);
+    }
     return *this;
 }
 
@@ -953,17 +1051,17 @@ const LFXOpenGLES &LFXOpenGLES::GenFramebuffers(const string &label, GLsizei n, 
     }
     glGenFramebuffers(n, framebuffers);
     LogDebug("glGenFramebuffers(count = %d, framebuffers = %p) -> ", n, framebuffers);
-//        if (GPUDevice::isDebug())
-//        {
-//            char names[n * 2] = {0};
-//            sprintf(names, "glGenFramebuffers(count = %d, framebuffers = %p) -> ", n, framebuffers);
-//            for (int i = 0; i < n; ++i)
-//            {
-//                sprintf(names, "%d ", framebuffers[i]);
-//            }
-//            sprintf(names, "");
-//            LogDebug("%s", names);
-//        }
+    //        if (GPUDevice::isDebug())
+    //        {
+    //            char names[n * 2] = {0};
+    //            sprintf(names, "glGenFramebuffers(count = %d, framebuffers = %p) -> ", n, framebuffers);
+    //            for (int i = 0; i < n; ++i)
+    //            {
+    //                sprintf(names, "%d ", framebuffers[i]);
+    //            }
+    //            sprintf(names, "");
+    //            LogDebug("%s", names);
+    //        }
     return *this;
 }
 
@@ -973,10 +1071,10 @@ const LFXOpenGLES &LFXOpenGLES::BindFramebuffer(const string &label, GLenum targ
      */
     glBindFramebuffer(target, framebuffer);
     LogDebug("glBindFramebuffer(target = %s: %s, framebuffer = %d)",
-            toLFXOpenGLESLiteral(FramebufferObject, target).c_str(),
-            label.c_str(),
-            framebuffer);
-
+             toLFXOpenGLESLiteral(FramebufferObject, target).c_str(),
+             label.c_str(),
+             framebuffer);
+    
 #if GL_EXT_debug_label
     glLabelObjectEXT(GL_FRAMEBUFFER, framebuffer, 0, label.c_str());
     /// 在glGenFramebuffers时只调用一次是无效的？只有下面这样每次都调用才有效？为什么glCreateProgram只调用一次有效呢？
@@ -994,8 +1092,8 @@ const LFXOpenGLES &LFXOpenGLES::BindFramebuffer(const string &label, GLenum targ
 const LFXOpenGLES &LFXOpenGLES::CheckFramebufferStatus(const string &label, GLenum target, GLenum &status) const {
     status = glCheckFramebufferStatus(target);
     LogDebug("glCheckFramebufferStatus(%s) -> %s",
-            toLFXOpenGLESLiteral(FramebufferObject, target).c_str(),
-            toLFXOpenGLESLiteral(FramebufferObject, status).c_str());
+             toLFXOpenGLESLiteral(FramebufferObject, target).c_str(),
+             toLFXOpenGLESLiteral(FramebufferObject, status).c_str());
     return *this;
 }
 
@@ -1008,21 +1106,21 @@ const LFXOpenGLES &LFXOpenGLES::FramebufferRenderbuffer(const string &label, GLe
 }
 
 const LFXOpenGLES &LFXOpenGLES::FramebufferTexture2D(const string &label, GLenum target, GLenum attachment, GLenum textarget, GLuint texture, GLint level) const {
-//#if GL_EXT_debug_label
-//        /// GL_TEXTURE 正常工作
-//        static char kOutputTexture[] = "outputTexture";
-//        glBindTexture(GL_TEXTURE, texture->getHandle());
-//        glLabelObjectEXT(GL_TEXTURE, texture->getHandle(), 0, kOutputTexture);
-//#endif
+    //#if GL_EXT_debug_label
+    //        /// GL_TEXTURE 正常工作
+    //        static char kOutputTexture[] = "outputTexture";
+    //        glBindTexture(GL_TEXTURE, texture->getHandle());
+    //        glLabelObjectEXT(GL_TEXTURE, texture->getHandle(), 0, kOutputTexture);
+    //#endif
     glFramebufferTexture2D(target, attachment, textarget, texture, level);
     LogDebug(
-            "glFramebufferTexture2D(target = %s: %s, attachment = %s, texture target = %s, texture = %d, level = %d)",
-            toLFXOpenGLESLiteral(FramebufferObject, target).c_str(),
-            label.c_str(),
-            toLFXOpenGLESLiteral(FramebufferObject, attachment).c_str(),
-            toLFXOpenGLESLiteral(TextureTarget, textarget).c_str(),
-            texture,
-            level);
+             "glFramebufferTexture2D(target = %s: %s, attachment = %s, texture target = %s, texture = %d, level = %d)",
+             toLFXOpenGLESLiteral(FramebufferObject, target).c_str(),
+             label.c_str(),
+             toLFXOpenGLESLiteral(FramebufferObject, attachment).c_str(),
+             toLFXOpenGLESLiteral(TextureTarget, textarget).c_str(),
+             texture,
+             level);
     return *this;
 }
 
@@ -1047,7 +1145,7 @@ const LFXOpenGLES &LFXOpenGLES::Viewport(GLint x, GLint y, GLsizei width, GLsize
 #pragma mark Shader
 
 const LFXOpenGLES &LFXOpenGLES::CreateShader(const string &label, GLenum shaderType, GLuint &shader) const {
-//    shader = glCreateShader(shaderType);
+    //    shader = glCreateShader(shaderType);
     if (enableVerboseOutput) {
         LogDebug("glCreateShader(%s) -> %s: %d", toLFXOpenGLESLiteral(LFXOpenGLESShaderType, shaderType).c_str(), label.c_str(), shader);
     }
@@ -1055,7 +1153,7 @@ const LFXOpenGLES &LFXOpenGLES::CreateShader(const string &label, GLenum shaderT
 }
 
 const LFXOpenGLES &LFXOpenGLES::ShaderSource(const string &label, GLuint shader, GLsizei count, const GLchar *const *string, const GLint *length) const {
-//    glShaderSource(shader, count, string, length);
+    //    glShaderSource(shader, count, string, length);
     if (enableVerboseOutput) {
         LogDebug("glShaderSource(shader = %s: %d, count = %d, string = %p, length = %p)", label.c_str(), shader, count, string, length);
     }
@@ -1063,7 +1161,7 @@ const LFXOpenGLES &LFXOpenGLES::ShaderSource(const string &label, GLuint shader,
 }
 
 const LFXOpenGLES &LFXOpenGLES::CompileShader(const string &label, GLuint shader) const {
-//    glCompileShader(shader);
+    //    glCompileShader(shader);
     if (enableVerboseOutput) {
         LogDebug("glCompileShader(shader = %s: %d)", label.c_str(), shader);
     }
@@ -1071,7 +1169,7 @@ const LFXOpenGLES &LFXOpenGLES::CompileShader(const string &label, GLuint shader
 }
 
 const LFXOpenGLES &LFXOpenGLES::GetShaderiv(const string &label, GLuint shader, GLenum pname, GLint *params) const {
-//    glGetShaderiv(shader, pname, params);
+    //    glGetShaderiv(shader, pname, params);
     if (enableVerboseOutput) {
         LogDebug("glGetShaderiv(shader = %s: %d, pname = %s, params = %p) -> %s", label.c_str(), shader, toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(), params, toLFXOpenGLESLiteral(LFXOpenGLESBoolean, *params).c_str());
     }
@@ -1079,7 +1177,7 @@ const LFXOpenGLES &LFXOpenGLES::GetShaderiv(const string &label, GLuint shader, 
 }
 
 const LFXOpenGLES &LFXOpenGLES::GetShaderInfoLog(const string &label, GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *log) const {
-//    glGetShaderInfoLog(shader, bufsize, NULL, log);
+    //    glGetShaderInfoLog(shader, bufsize, NULL, log);
     if (enableVerboseOutput) {
         LogDebug("glGetShaderInfoLog(shader = %s: %d, bufsize = %d, length = %p, log = %p)", label.c_str(), shader, bufsize, length, (void *) log);
     }
@@ -1087,7 +1185,7 @@ const LFXOpenGLES &LFXOpenGLES::GetShaderInfoLog(const string &label, GLuint sha
 }
 
 const LFXOpenGLES &LFXOpenGLES::DeleteShader(const string &label, GLuint shader) const {
-//    glDeleteShader(shader);
+    //    glDeleteShader(shader);
     if (enableVerboseOutput) {
         LogDebug("glDeleteShader(shader = %s: %d)", label.c_str(), shader);
     }
@@ -1095,7 +1193,7 @@ const LFXOpenGLES &LFXOpenGLES::DeleteShader(const string &label, GLuint shader)
 }
 
 const LFXOpenGLES &LFXOpenGLES::IsShader(const string &label, GLuint shader, GLboolean &isShader) const {
-//    isShader = glIsShader(shader);
+    //    isShader = glIsShader(shader);
     if (enableVerboseOutput) {
         LogDebug("glIsShader(shader = %s: %d) -> %s", label.c_str(), shader, toLFXOpenGLESLiteral(LFXOpenGLESBoolean, isShader).c_str());
     }
@@ -1103,7 +1201,7 @@ const LFXOpenGLES &LFXOpenGLES::IsShader(const string &label, GLuint shader, GLb
 }
 
 const LFXOpenGLES &LFXOpenGLES::ShaderBinary(GLsizei n, const GLuint *shaders, GLenum binaryformat, const GLvoid *binary, GLsizei length) const {
-//    glShaderBinary(n, shaders, binaryformat, binary, length);
+    //    glShaderBinary(n, shaders, binaryformat, binary, length);
     if (enableVerboseOutput) {
         LogDebug("glShaderBinary(n = %d, shaders = %p, binaryformat = %s, binary = %p, length = %d)", n, shaders, toLFXOpenGLESLiteral(LFXOpenGLESParamsName, binaryformat).c_str(), binary, length)
     }
@@ -1111,7 +1209,7 @@ const LFXOpenGLES &LFXOpenGLES::ShaderBinary(GLsizei n, const GLuint *shaders, G
 }
 
 const LFXOpenGLES &LFXOpenGLES::ReleaseShaderCompiler(void) const {
-//    glReleaseShaderCompiler();
+    //    glReleaseShaderCompiler();
     if (enableVerboseOutput) {
         LogDebug("glReleaseShaderCompiler()")
     }
@@ -1120,7 +1218,7 @@ const LFXOpenGLES &LFXOpenGLES::ReleaseShaderCompiler(void) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 GetShaderSource(const string &label, GLuint shader, GLsizei bufsize, GLsizei *length, GLchar *source) const {
-//    glGetShaderSource(shader, bufsize, length, source);
+    //    glGetShaderSource(shader, bufsize, length, source);
     if (enableVerboseOutput) {
         LogDebug("glGetShaderSource(shader = %s: %d, bufsize = %d, length = %p, source = %s)", label.c_str(), shader, bufsize, length, source)
     }
@@ -1131,7 +1229,7 @@ const LFXOpenGLES &LFXOpenGLES::
 GetShaderPrecisionFormat(const string &label, GLenum shadertype, GLenum precisiontype, GLint *range, GLint *precision) const {
     glGetShaderPrecisionFormat(shadertype, precisiontype, range, precision);
     if (enableVerboseOutput) {
-//        LogDebug("glGetShaderPrecisionFormat(shadertype = %s, precisiontype = %s, range= %p, precision = %d)")
+        //        LogDebug("glGetShaderPrecisionFormat(shadertype = %s, precisiontype = %s, range= %p, precision = %d)")
     }
     return *this;
 }
@@ -1329,8 +1427,8 @@ const LFXOpenGLES &LFXOpenGLES::BlendFuncSeparate(const string &label, GLenum sr
 const LFXOpenGLES &LFXOpenGLES::BlendFunc(GLenum sfactor, GLenum dfactor) const {
     glBlendFunc(sfactor, dfactor);
     LogDebug("glBlendFunc(sfactor = %s, dfactor = %s)",
-            toLFXOpenGLESLiteral(Blend, sfactor).c_str(),
-            toLFXOpenGLESLiteral(Blend, dfactor).c_str());
+             toLFXOpenGLESLiteral(Blend, sfactor).c_str(),
+             toLFXOpenGLESLiteral(Blend, dfactor).c_str());
     return *this;
 }
 
@@ -1370,7 +1468,7 @@ const LFXOpenGLES &LFXOpenGLES::
 IsProgram(const string &label, GLuint program, GLboolean &isProgram) const {
     isProgram = glIsProgram(program);
     if (enableVerboseOutput) {
-//        LogDebug("glIsProgram(%s: %d) -> %s", label.c_str(), program, toLFXOpenGLESLiteral(LFXOpenGLESBoolean, isProgram))
+        //        LogDebug("glIsProgram(%s: %d) -> %s", label.c_str(), program, toLFXOpenGLESLiteral(LFXOpenGLESBoolean, isProgram))
     }
     return *this;
 }
@@ -1379,7 +1477,7 @@ const LFXOpenGLES &LFXOpenGLES::
 GetVertexAttribPointerv(const string &label, GLuint index, GLenum pname, GLvoid **pointer) const {
     glGetVertexAttribPointerv(index, pname, pointer);
     if (enableVerboseOutput) {
-//        LogDebug("glGetVertexAttribPointerv(index = %d, pname = %s, pointer = %p)", label.c_str(), toLFXOpenGLESLiteral(LFXOpenGLESBoolean, isProgram))
+        //        LogDebug("glGetVertexAttribPointerv(index = %d, pname = %s, pointer = %p)", label.c_str(), toLFXOpenGLESLiteral(LFXOpenGLESBoolean, isProgram))
     }
     return *this;
 }
@@ -1404,7 +1502,7 @@ GetVertexAttribfv(const string &label, GLuint index, GLenum pname, GLfloat *para
 
 const LFXOpenGLES &LFXOpenGLES::
 GetUniformLocation(const string &label, GLuint program, const GLchar *name, int location) const {
-//    location = glGetUniformLocation(program, name);
+    //    location = glGetUniformLocation(program, name);
     if (enableVerboseOutput) {
         LogDebug("glGetUniformLocation(%s: %d, %s) -> %d", label.c_str(), program, name, location);
     }
@@ -1413,7 +1511,7 @@ GetUniformLocation(const string &label, GLuint program, const GLchar *name, int 
 
 const LFXOpenGLES &LFXOpenGLES::
 GetUniformiv(const string &label, GLuint program, GLint location, GLint *params) const {
-//    glGetUniformiv(program, location, params);
+    //    glGetUniformiv(program, location, params);
     if (enableVerboseOutput) {
         LogDebug("glGetUniformiv(%s: %d, location = %d, params = %p)", label.c_str(), program, location, params)
     }
@@ -1422,7 +1520,7 @@ GetUniformiv(const string &label, GLuint program, GLint location, GLint *params)
 
 const LFXOpenGLES &LFXOpenGLES::
 GetUniformfv(const string &label, GLuint program, GLint location, GLfloat *params) const {
-//    glGetUniformfv(program, location, params);
+    //    glGetUniformfv(program, location, params);
     if (enableVerboseOutput) {
         LogDebug("glGetUniformfv(%s: %d, location = %d, params = %p)", label.c_str(), program, location, params)
     }
@@ -1458,20 +1556,20 @@ VertexAttribPointer(const string &label, GLuint location, GLint size, GLenum typ
     glVertexAttribPointer(location, size, type, normalized, stride, ptr);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttribPointer(%s: %d, size = %d, type = %s, normalized = %s, stride = %d, ptr = %p)",
-                label.c_str(),
-                location,
-                size,
-                toLFXOpenGLESLiteral(GLESMacroDataType, type).c_str(),
-                toLFXOpenGLESLiteral(LFXOpenGLESBoolean, normalized).c_str(),
-                stride,
-                ptr);
+                 label.c_str(),
+                 location,
+                 size,
+                 toLFXOpenGLESLiteral(GLESMacroDataType, type).c_str(),
+                 toLFXOpenGLESLiteral(LFXOpenGLESBoolean, normalized).c_str(),
+                 stride,
+                 ptr);
     }
     return *this;
 }
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib4fv(const string &label, GLuint indx, const GLfloat *values) const {
-//    glVertexAttrib4fv(indx, values);
+    //    glVertexAttrib4fv(indx, values);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib4fv(%s: %d, values = %p)", label.c_str(), indx, values)
     }
@@ -1480,7 +1578,7 @@ VertexAttrib4fv(const string &label, GLuint indx, const GLfloat *values) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib4f(const string &label, GLuint indx, GLfloat x, GLfloat y, GLfloat z, GLfloat w) const {
-//    glVertexAttrib4f(indx, x, y, z, w);
+    //    glVertexAttrib4f(indx, x, y, z, w);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib4f(%s: %d, x, y, z, w)", label.c_str(), indx, x, y, z, w)
     }
@@ -1489,7 +1587,7 @@ VertexAttrib4f(const string &label, GLuint indx, GLfloat x, GLfloat y, GLfloat z
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib3fv(const string &label, GLuint indx, const GLfloat *values) const {
-//    glVertexAttrib3fv(indx, values);
+    //    glVertexAttrib3fv(indx, values);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib3fv(%s: %d, values = %p)", label.c_str(), indx, values)
     }
@@ -1498,7 +1596,7 @@ VertexAttrib3fv(const string &label, GLuint indx, const GLfloat *values) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib3f(const string &label, GLuint indx, GLfloat x, GLfloat y, GLfloat z) const {
-//    glVertexAttrib3f(indx, x, y, z);
+    //    glVertexAttrib3f(indx, x, y, z);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib3f(%s: %d, x, y, z)", label.c_str(), indx, x, y, z)
     }
@@ -1507,7 +1605,7 @@ VertexAttrib3f(const string &label, GLuint indx, GLfloat x, GLfloat y, GLfloat z
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib2fv(const string &label, GLuint indx, const GLfloat *values) const {
-//    glVertexAttrib2fv(indx, values);
+    //    glVertexAttrib2fv(indx, values);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib2fv(%s: %d, values = %p)", label.c_str(), indx, values)
     }
@@ -1516,7 +1614,7 @@ VertexAttrib2fv(const string &label, GLuint indx, const GLfloat *values) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib2f(const string &label, GLuint indx, GLfloat x, GLfloat y) const {
-//    glVertexAttrib2f(indx, x, y);
+    //    glVertexAttrib2f(indx, x, y);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib2f(%s: %d, x, y)", label.c_str(), indx, x, y)
     }
@@ -1525,7 +1623,7 @@ VertexAttrib2f(const string &label, GLuint indx, GLfloat x, GLfloat y) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib1fv(const string &label, GLuint indx, const GLfloat *values) const {
-//    glVertexAttrib1fv(indx, values);
+    //    glVertexAttrib1fv(indx, values);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib1fv(%s: %d, values = %p)", label.c_str(), indx, values)
     }
@@ -1534,7 +1632,7 @@ VertexAttrib1fv(const string &label, GLuint indx, const GLfloat *values) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 VertexAttrib1f(const string &label, GLuint indx, GLfloat x) const {
-//    glVertexAttrib1f(indx, x);
+    //    glVertexAttrib1f(indx, x);
     if (enableVerboseOutput) {
         LogDebug("glVertexAttrib1f(%s: %d, x)", label.c_str(), indx, x)
     }
@@ -1543,7 +1641,7 @@ VertexAttrib1f(const string &label, GLuint indx, GLfloat x) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 UniformMatrix4fv(ConstStringRefLabel, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) const {
-//    glUniformMatrix4fv(location, count, transpose, value);
+    //    glUniformMatrix4fv(location, count, transpose, value);
     if (enableVerboseOutput) {
         LogDebug("glUniformMatrix4fv(%s: %d, count = %d, transpose = %s, value = %p)", label.c_str(), location, count, toLFXOpenGLESLiteral(LFXOpenGLESBoolean, transpose).c_str(), value)
     }
@@ -1552,7 +1650,7 @@ UniformMatrix4fv(ConstStringRefLabel, GLint location, GLsizei count, GLboolean t
 
 const LFXOpenGLES &LFXOpenGLES::
 UniformMatrix3fv(ConstStringRefLabel, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) const {
-//    glUniformMatrix3fv(location, count, transpose, value);
+    //    glUniformMatrix3fv(location, count, transpose, value);
     if (enableVerboseOutput) {
         LogDebug("glUniformMatrix3fv(%s: %d, count = %d, transpose = %s, value = %p)", label.c_str(), location, count, toLFXOpenGLESLiteral(LFXOpenGLESBoolean, transpose).c_str(), value)
     }
@@ -1561,7 +1659,7 @@ UniformMatrix3fv(ConstStringRefLabel, GLint location, GLsizei count, GLboolean t
 
 const LFXOpenGLES &LFXOpenGLES::
 UniformMatrix2fv(ConstStringRefLabel, GLint location, GLsizei count, GLboolean transpose, const GLfloat *value) const {
-//    glUniformMatrix2fv(location, count, transpose, value);
+    //    glUniformMatrix2fv(location, count, transpose, value);
     if (enableVerboseOutput) {
         LogDebug("glUniformMatrix2fv(%s: %d, count = %d, transpose = %s, value = %p)", label.c_str(), location, count, toLFXOpenGLESLiteral(LFXOpenGLESBoolean, transpose).c_str(), value)
     }
@@ -1570,7 +1668,7 @@ UniformMatrix2fv(ConstStringRefLabel, GLint location, GLsizei count, GLboolean t
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform4iv(ConstStringRefLabel, GLint location, GLsizei count, const GLint *v) const {
-//    glUniform4iv(location, count, v);
+    //    glUniform4iv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform4iv(%s: %d, count = %d, v = %p)", label.c_str(), location, count, v)
     }
@@ -1579,7 +1677,7 @@ Uniform4iv(ConstStringRefLabel, GLint location, GLsizei count, const GLint *v) c
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform4i(ConstStringRefLabel, GLint location, GLint x, GLint y, GLint z, GLint w) const {
-//    glUniform4i(location, x, y, z, w);
+    //    glUniform4i(location, x, y, z, w);
     if (enableVerboseOutput) {
         LogDebug("glUniform4i(%s: %d, x = %d, y = %d, z = %d, w = %d)", label.c_str(), location, x, y, z, w);
     }
@@ -1588,7 +1686,7 @@ Uniform4i(ConstStringRefLabel, GLint location, GLint x, GLint y, GLint z, GLint 
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform4fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v) const {
-//    glUniform4fv(location, count, v);
+    //    glUniform4fv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform4fv(%s: %d, count = %d, v = %p)", label.c_str(), location, count, v)
     }
@@ -1597,7 +1695,7 @@ Uniform4fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v)
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform4f(ConstStringRefLabel, GLint location, GLfloat x, GLfloat y, GLfloat z, GLfloat w) const {
-//    glUniform4f(location, x, y, z, w);
+    //    glUniform4f(location, x, y, z, w);
     if (enableVerboseOutput) {
         LogDebug("glUniform4f(%s: %d, x = %f, y = %f, z = %f, w = %f)", label.c_str(), location, x, y, z, w)
     }
@@ -1606,7 +1704,7 @@ Uniform4f(ConstStringRefLabel, GLint location, GLfloat x, GLfloat y, GLfloat z, 
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform3iv(ConstStringRefLabel, GLint location, GLsizei count, const GLint *v) const {
-//    glUniform3iv(location, count, v);
+    //    glUniform3iv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform3iv(%s: %d, count = %d, v = %p)", label.c_str(), location, count, v)
     }
@@ -1615,7 +1713,7 @@ Uniform3iv(ConstStringRefLabel, GLint location, GLsizei count, const GLint *v) c
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform3i(ConstStringRefLabel, GLint location, GLint x, GLint y, GLint z) const {
-//    glUniform3i(location, x, y, z);
+    //    glUniform3i(location, x, y, z);
     if (enableVerboseOutput) {
         LogDebug("glUniform3i(%s: %d, x = %d, y = %d, z = %d)", label.c_str(), location, x, y, z);
     }
@@ -1624,7 +1722,7 @@ Uniform3i(ConstStringRefLabel, GLint location, GLint x, GLint y, GLint z) const 
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform3fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v) const {
-//    glUniform3fv(location, count, v);
+    //    glUniform3fv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform3fv(%s: %d, count = %d, v = %p)", label.c_str(), location, count, v)
     }
@@ -1633,7 +1731,7 @@ Uniform3fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v)
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform3f(ConstStringRefLabel, GLint location, GLfloat x, GLfloat y, GLfloat z) const {
-//    glUniform3f(location, x, y, z);
+    //    glUniform3f(location, x, y, z);
     if (enableVerboseOutput) {
         LogDebug("glUniform3f(%s: %d, x = %f, y = %f, z = %f)", label.c_str(), location, x, y, z)
     }
@@ -1642,7 +1740,7 @@ Uniform3f(ConstStringRefLabel, GLint location, GLfloat x, GLfloat y, GLfloat z) 
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform2iv(ConstStringRefLabel, GLint location, GLsizei count, const GLint *v) const {
-//    glUniform2iv(location, count, v);
+    //    glUniform2iv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform2iv(%s: %d, count = %d, v = %p)", label.c_str(), location, count, v)
     }
@@ -1651,7 +1749,7 @@ Uniform2iv(ConstStringRefLabel, GLint location, GLsizei count, const GLint *v) c
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform2i(ConstStringRefLabel, GLint location, GLint x, GLint y) const {
-//    glUniform2i(location, x, y);
+    //    glUniform2i(location, x, y);
     if (enableVerboseOutput) {
         LogDebug("glUniform2i(%s: %d, x = %d, y = %d)", label.c_str(), location, x, y);
     }
@@ -1660,7 +1758,7 @@ Uniform2i(ConstStringRefLabel, GLint location, GLint x, GLint y) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform2fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v) const {
-//    glUniform2fv(location, count, v);
+    //    glUniform2fv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform2fv(%s: %d, count = %d, v = %p)", label.c_str(), location, count, v)
     }
@@ -1669,7 +1767,7 @@ Uniform2fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v)
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform2f(ConstStringRefLabel, GLint location, GLfloat x, GLfloat y) const {
-//    glUniform2f(location, x, y);
+    //    glUniform2f(location, x, y);
     if (enableVerboseOutput) {
         LogDebug("glUniform2f(%s: %d, x = %f, y = %f)", label.c_str(), location, x, y)
     }
@@ -1678,7 +1776,7 @@ Uniform2f(ConstStringRefLabel, GLint location, GLfloat x, GLfloat y) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform1iv(const string &label, GLint location, GLsizei count, const GLint *v) const {
-//    glUniform1iv(location, count, v);
+    //    glUniform1iv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform1iv(%s: %d, %d)", label.c_str(), location, count, v);
     }
@@ -1687,7 +1785,7 @@ Uniform1iv(const string &label, GLint location, GLsizei count, const GLint *v) c
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform1i(ConstStringRefLabel, GLint location, GLint value) const {
-//    glUniform1i(location, value);
+    //    glUniform1i(location, value);
     if (enableVerboseOutput) {
         LogDebug("glUniform1i(%s: %d, %d)", label.c_str(), location, value);
     }
@@ -1696,7 +1794,7 @@ Uniform1i(ConstStringRefLabel, GLint location, GLint value) const {
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform1fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v) const {
-//    glUniform1fv(location, count, v);
+    //    glUniform1fv(location, count, v);
     if (enableVerboseOutput) {
         LogDebug("glUniform1fv(%s: %d, count = %d, v = %p)", label.c_str(), location, count, v)
     }
@@ -1705,7 +1803,7 @@ Uniform1fv(ConstStringRefLabel, GLint location, GLsizei count, const GLfloat *v)
 
 const LFXOpenGLES &LFXOpenGLES::
 Uniform1f(ConstStringRefLabel, GLint location, GLfloat x) const {
-//    glUniform1f(location, x);
+    //    glUniform1f(location, x);
     if (enableVerboseOutput) {
         LogDebug("glUniform1f(%s: %d, %f)", label.c_str(), location, x)
     }
@@ -1727,11 +1825,11 @@ GetProgramiv(const string &label, GLuint program, GLenum pname, GLint *params) c
     glGetProgramiv(program, pname, params);
     if (enableVerboseOutput) {
         LogDebug("glGetProgramiv(%s: %d, pname = %s, params = %p) -> %s",
-                label.c_str(),
-                program,
-                toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
-                params,
-                toLFXOpenGLESLiteral(LFXOpenGLESBoolean, *params).c_str());
+                 label.c_str(),
+                 program,
+                 toLFXOpenGLESLiteral(LFXOpenGLESParamsName, pname).c_str(),
+                 params,
+                 toLFXOpenGLESLiteral(LFXOpenGLESBoolean, *params).c_str());
     }
     return *this;
 }
